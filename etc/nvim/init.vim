@@ -1,124 +1,108 @@
-" Author: fenze <contact@fenze.dev>
-
-set fillchars=eob:\ ,vert:\ ,
-set laststatus=0
-set noruler
-set shortmess=F
-set noswapfile
-set clipboard=unnamedplus
-set tabstop=2
-set shiftwidth=2
-set ignorecase
-set nohlsearch
-set smarttab
-set formatoptions-=cro
-set scrolloff=10
-set nowrap
-set cursorline
-set hidden
-set noexpandtab
-set keywordprg=:tab\ Man
-set noshowmode
-set noshowcmd
-set splitbelow splitright
-set shortmess+=W
-set shortmess+=c
-set guicursor=n-v-c:block-Cursor
-
-syntax on
-filetype plugin indent on
-
 cal plug#begin()
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
 	Plug 'catppuccin/nvim', {'as': 'catppuccin'}
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	Plug 'preservim/nerdcommenter'
-	Plug 'deoplete-plugins/deoplete-clang'
+	Plug 'sheerun/vim-polyglot'
+	Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 cal plug#end()
 
-cal deoplete#enable()
-cal deoplete#custom#option('refresh_always', v:false)
-
+set nocompatible
 colo catppuccin
-
-so ~/.config/nvim/colors.vim
-
-hi! link EndofBuffer Normal
-hi! Normal ctermbg=NONE guibg=NONE
+hi Normal ctermbg=NONE guibg=NONE
 hi! link NormalNC Normal
-hi Comment guifg=#8080aa
 
-au BufRead,BufNewFile *.scss set filetype=scss.css
+" remove ~ symbols
+" and vertical line
+set fillchars=eob:\ ,vert:\ ,
 
-au BufWritePost *.sass silent !sassc "%:p" "%:r.css"
+" hide bottom bar
+" and current line/column
+set laststatus=0
+set noruler
+set noshowmode
+set hidden
 
-nmap <silent> gd <Plug>(lcn-definition)
-nmap <silent> gr <Plug>(lcn-rename)
-nmap <silent> L <Plug>(lcn-hover)
+" trash files
+set noswapfile
+set nobackup
 
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#max_abbr_width = 0
-let g:deoplete#max_menu_width = 0
+" Search
+set nohlsearch
+set ignorecase
 
-set completeopt-=preview
+" Always block cursor
+set guicursor=n-v-c:block-Cursor
 
+" tab sizes
+set tabstop=2
+set shiftwidth=2
+
+" auto scrolling
+set scrolloff=7
+
+" capslock off by default
+set iminsert=0
+
+" autodetect filetype
+syntax on
+filetype plugin indent on
+
+" clipboard
+set clipboard=unnamedplus
+
+com! Reload :so $MYVIMRC
+
+" keybinds
+nm <silent> ;     :History: <cr>
+nm <silent> <c-f> :Rg       <cr>
+nm <silent> <c-n> :Files    <cr>
+map <c-_> <plug>NERDCommenterToggle
+map <space> /
+nm <silent> gd <Plug>(lcn-definition)
+nm <silent> gr <Plug>(lcn-rename)
+nm <silent> L <Plug>(lcn-hover)
+nm <silent> gf <Plug>(lcn-references)
+
+nm <silent> <c-h> ^
+nm <silent> <c-l> $
+
+vm <silent> <c-h> ^
+vm <silent> <c-l> $
+
+" tabs
+nm <silent> <A-h> :tabn <cr>
+nm <silent> <A-l> :tabp <cr>
+nm <a-1> 1gt
+nm <a-2> 2gt
+nm <a-3> 3gt
+nm <a-4> 4gt
+nm <a-5> 5gt
+nm <a-6> 6gt
+nm <a-7> 7gt
+nm <a-8> 8gt
+nm <a-9> 9gt
+
+" automation
+au BufWinEnter *.c,*.h call matchadd("ErrorMsg", '\%>75v.\+', 10, 4)
+au BufEnter * if &buftype == 'terminal' | :startinsert | endif
+au BufWrite * sil! :%s#\($\n\s*\)\+\%$## | :%s/\s\+$//e
+au InsertLeave * set iminsert=0
+
+" commenter
 let g:NERDSpaceDelims = 1
 let g:NERDCommentEmptyLines = 1
 
-nm <c-f> :Rg        <cr>
-nm <c-n> :Files     <cr>
-nm <c-h> :History   <cr>
-nm sc  :Commits   <cr>
-
-nm <space> /
-nm ; :
-
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-noremap <silent> <C-Left> :vertical resize +3<CR>
-noremap <silent> <C-Right> :vertical resize -3<CR>
-noremap <silent> <C-Up> :resize +3<CR>
-noremap <silent> <C-Down> :resize -3<CR>
-
-tnoremap <C-h> <C-\><C-n><C-w>h
-tnoremap <C-j> <C-\><C-n><C-w>j
-tnoremap <C-k> <C-\><C-n><C-w>k
-tnoremap <C-l> <C-\><C-n><C-w>l
-
-let $confp = '~/.config/nvim/init.vim'
-com! Reload :so $confp
-
-au BufWinEnter *.c,*.h,*.py let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-
-let g:fzf_layout = { 'down': '30%' }
-let g:fzf_colors = {
-	\ 'fg':         ['fg', 'Normal'],
-	\ 'bg':         ['bg', 'NONE'],
-	\ 'preview-bg': ['bg', 'Normal'],
-	\ 'hl':         ['fg', 'Normal'],
-	\ 'fg+':        ['fg', 'Normal'],
-	\ 'bg+':        ['bg', 'Normal'],
-	\ 'hl+':        ['fg', 'Normal'],
-	\ 'info':       ['fg', 'Normal'],
-	\ 'border':     ['fg', 'Ignore'],
-	\ 'prompt':     ['fg', 'Normal'],
-	\ 'pointer':    ['fg', 'Normal'],
-	\ 'marker':     ['fg', 'Normal'],
-	\ 'spinner':    ['fg', 'Normal'],
-	\ 'header':     ['fg', 'Normal'] }
-
-map <c-_> <plug>NERDCommenterToggle
-
-let g:instant_markdown_autostart = 0
-map tt :vnew term://zsh<cr>
-
-au BufEnter * if &buftype == 'terminal' | :startinsert | endif
-au WinEnter * :stopinsert
-
-tno :q <C-\><C-n> :q <cr>
-
-au BufWrite * sil! :%s#\($\n\s*\)\+\%$## | :%s/\s\+$//e
+" completions
+set completeopt=menuone,noselect
+set completeopt-=preview
+let g:deoplete#enable_at_startup = 1
+cal deoplete#custom#option('refresh_always', v:false)
+let g:LanguageClient_serverCommands = {
+	\ 'c': ['clangd', '-j=12', '--clang-tidy'],
+	\ 'python': ['pylsp'] }
