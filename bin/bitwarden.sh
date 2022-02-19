@@ -16,10 +16,12 @@ login() {
     [ -z "$LOGIN" ] && exit
 
     case $(printf 'Login\nPassword' | dmenu -p "Copy:") in
-      "Login") echo $LOGIN | xclip -sel clip;;
+      "Login")
+        echo $LOGIN | xclip -sel clip
+        exit;;
       "Password")
         echo $PASSWORD | bw get password $LOGIN | xclip -sel clip
-        sleep 30 && echo -n "" | xclip -selection clipboard -r &;;
+        exit;;
     esac
   }
 }

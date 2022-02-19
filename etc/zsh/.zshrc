@@ -134,33 +134,32 @@ export FZF_DEFAULT_OPTS='
 # files/dictonaries
 fzf_open()
 {
-  # Remove 2 lines to cleaner look
+  # Remove 2 lines
+  # to cleaner look
   tput cuu 1
 
   TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
 
-  # Checks is it file
-  [ -f "$TARGET" ] && {
+  [ -z $TARGET ] && exit
 
+  # Checks is it file
+  [ -f $TARGET ] && {
     # Checks file extension
     [ $(printf $TARGET | sed 's/.*\././') = .pdf ] && {
-
       # Open with default pdf app
       xdg-open $TARGET
-
     } || {
-
       # Open with default editor
       $EDITOR $TARGET ^M
     }
   } || {
-
     # If target is dictonary
     [ -d $TARGET ] && cd $TARGET
   }
 }
 
-# Update nvim plugins, pacman/yay packages
+# Update nvim plugins,
+# pacman/yay packages
 update() {
   echo "Updating: neovim plugins..." && {
     $(nvim -c PlugUpdate -c qa! &> /dev/null) && {
@@ -197,6 +196,7 @@ update() {
   }
 }
 
+# Bindings
 bindkey -s '^n' "fzf_open ^M"
 bindkey -s '^e' "fc ^M"
 bindkey -s '^f' "tput cuu 1 && nnn ^M"
