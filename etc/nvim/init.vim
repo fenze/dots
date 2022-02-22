@@ -41,7 +41,7 @@ au BufRead,BufNewFile *.scss set filetype=scss.css
 let g:LanguageClient_serverCommands = { 'c': ['clangd'], 'python': ['pylsp'], 'go': ['gopls'] }
 
 au BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
-au! BufWritePost *.sass :!sassc "%:p" "%:p:h/style.css"
+au BufWritePost *.sass !sassc "%:p" "%:p:h/style.css"
 
 let g:LanguageClient_hoverPreview = "Never"
 let g:LanguageClient_echoProjectRoot = 0
