@@ -28,6 +28,7 @@ call plug#begin()
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
   Plug 'preservim/nerdcommenter'
   Plug 'cakebaker/scss-syntax.vim'
+  Plug 'ap/vim-css-color'
 call plug#end()
 
 call deoplete#enable()

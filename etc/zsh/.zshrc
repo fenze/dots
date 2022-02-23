@@ -53,6 +53,7 @@ zstyle ':completion:*:*:*:*:processes' command'ps -u $USER -o pid,user,comm,cmd 
 zstyle ':completion:*:exa' file-sort modification
 zstyle ':completion:*:exa' sort false
 
+setopt complete_aliases
 setopt complete_in_word
 setopt always_to_end
 setopt path_dirs

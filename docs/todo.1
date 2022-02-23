@@ -1,0 +1,50 @@
+.\" The fenze todo.sh manpage
+.\" Copyright © 2022 fenze <contact@fenze.dev>
+
+.TH "" "1" "2022" "" "fenze todo.sh Manual"
+
+.SH NAME
+.PP
+todo.sh - minimal script to manage todo list.
+
+.SH OPTIONS
+.PP
+Basically script should take all commands available in dmenu and few more like:
+
+\fBinstall\fP
+  - Copies script to $PATH
+
+\fBuninstall\fP
+  - Removes script from $PATH
+
+\fB-path\fP
+  - custom todo file path
+
+\fB--help\fP
+  - Shows dmenu options
+
+.SH FILES
+.PP
+\fB.todo\fP
+  - the todo storage file
+
+.SH EXIT STATUS
+
+\fB0\fP - normal exit
+
+\fB1\fP - missing todo path dictonary
+
+\fB2\fP - cannot open todo file
+
+\fb3\fp - unknown command
+
+\fb4\fp - permission denied
+
+\fb5\fp - missing target
+
+.SH COPYRIGHT
+.PP
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and any associated documentation files to modify, copy, merge,
+publish, distribute and/or sublicense copies of this sotware for their own use.
+This code does not come with any warranty.
