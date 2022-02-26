@@ -59,7 +59,8 @@ export FZF_DEFAULT_OPTS='
   --color info:6,prompt:249,spinner:7,pointer:1,marker:0,header:#586e75
 '
 
-fzf_open() {
+fzf_open()
+{
 	tput cuu 2
 	FILE=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
 	[ ! -z $FILE ] && [ -f $FILE ] && {
@@ -67,6 +68,21 @@ fzf_open() {
 	} || [ -d $FILE ] && {
 		cd $FILE
 	}
+}
+
+update() {
+	echo "Updating: Neovim plugins"
+	$(nvim -c PlugUpdate -c qa! &> /dev/null) \
+		&& tput cuu 1 \
+		&& echo "Neovim: plugins update done."
+
+	echo "Updating: pacman" && \
+		$(doas pacman -Syyu --quiet --noconfirm &> /dev/null) \
+			&& tput cuu 1 && echo "Pacman: packages update done."
+
+	echo "Updating: yay" && \
+		$(doas yay -Syyu --quiet --noconfirm &> /dev/null) \
+			&& tput cuu 1 && echo "yay: packages update done."
 }
 
 bindkey -s '^o' "fzf_open ^M"
