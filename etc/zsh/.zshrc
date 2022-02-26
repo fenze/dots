@@ -3,13 +3,16 @@
 
 autoload -Uz compinit
 
-precmd() { compinit; zle-keymap-select }
+precmd()
+{
+	compinit
+	zle-keymap-select
+}
 
+zle-keymap-select() { [[ $KEYMAP = vicmd ]] && printf '\e[2 q' || printf '\e[4 q'; }
 zle -N zle-keymap-select
 
-zle-keymap-select() { [[ $KEYMAP = vicmd ]] && printf '\e[1 q' || printf '\e[5 q'; }
-
-prompt='$([ $PWD = $HOME ] || echo "%2~ ")\$ '
+prompt='$([ $PWD = $HOME ] || echo "%2~ ")| '
 
 # Activate vim mode.
 bindkey -v
@@ -21,11 +24,11 @@ export LS_COLORS=$LS_COLORS:"no=0;0":"di=30;34": \
 	"ln=30;36":"so=34:pi=0;33":"ex=35":"bd=34;46":"cd=30;43": \
 	"su=30;41":"sg=30;46":"ow=30;43":"tw=30;42"
 
+# ZSH completion menu with colors
 zstyle ':completion:*' list-colors ${LS_COLORS}
 zstyle ':completion:*' menu select
 
 export EDITOR='nvim'
-
 alias v='nvim'
 
 alias ls='ls --color=always'
@@ -36,7 +39,7 @@ alias ga='git add'
 alias gi='git init -q'
 alias gra='git remote add origin'
 alias gr='git remotes'
-alias gc='git commit --short'
+alias gc='git commit'
 alias gs='git status --short'
 alias gp='git push --quiet'
 
@@ -68,11 +71,3 @@ fzf_open() {
 
 bindkey -s '^o' "fzf_open ^M"
 bindkey -s '^a' "fc ^M"
-
-fetch()
-{
-	echo "os: $(cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2 | cut -d " " -f1)"
-	echo "kernel: $(uname -r | sed 's/-.*//')"
-	echo "packages: $(pacman -Qe | wc -l)"
-	echo "colors: $(for i in $(seq 6); do printf "\033[0;3%im• " "$i"; done)"
-}

@@ -1,0 +1,12 @@
+set recolor true
+set selection-clipboard clipboard
+set recolor-darkcolor						"#fff3d1"
+set recolor-lightcolor          "#0f0f0f"
+
+set default-bg                  "#0f0f0f"
+set render-loading              true
+set render-loading-fg           "#fff3d1"
+set render-loading-bg           "#0f0f0f"
+set index-bg                    "#18191E"
+
+map <C-b> toggle_statusbar
