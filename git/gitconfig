@@ -1,0 +1,21 @@
+[user]
+	name = fenze
+	email = contact@fenze.dev
+
+[push]
+	default = simple
+
+[commit]
+    	gpgsign = true
+
+[init]
+	defaultBranch = master
+
+[alias]
+    	contrib = shortlog -n -s
+    	remotes = remote -v
+    	praise = blame
+	verify = log --show-signature
+
+[push]
+	default = current

@@ -1,0 +1,12 @@
+ZDOTDIR=~/.config/zsh/
+HISTFILE=~/.cache/zsh/history
+SAVEHIST=5000
+HISTSIZE=5000
+setopt prompt_subst
+
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt INC_APPEND_HISTORY_TIME
+
+export LESSHISTFILE=-

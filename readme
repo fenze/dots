@@ -1,0 +1,11 @@
+Configs of my enviroment that helps me improve my workflow and productivity.
+
+Programs that i am using:
+  sh: zsh
+	wm: dwm
+	os: Arch
+	term: st
+	font: SF Mono
+	editor: neovim
+	launcher: dmenu
+	browser: chrome
