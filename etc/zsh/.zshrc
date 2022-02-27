@@ -84,6 +84,5 @@ update() {
 		$(doas yay -Syyu --quiet --noconfirm &> /dev/null) \
 			&& tput cuu 1 && echo "yay: packages update done."
 }
-
-bindkey -s '^o' "fzf_open ^M"
+bindkey -s '^n' "fzf_open ^M"
 bindkey -s '^a' "fc ^M"

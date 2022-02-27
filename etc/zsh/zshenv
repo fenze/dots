@@ -1,5 +1,9 @@
 ZDOTDIR=~/.config/zsh/
 HISTFILE=~/.cache/zsh/history
+
+[ -d $ZDOTDIR ] || mkdir ~/.config/zsh
+[ -d ~/.cache/zsh ] || mkdir ~/.cache/zsh
+[ -f $HISTFILE ] || touch ~/.cache/zsh/history
 SAVEHIST=5000
 HISTSIZE=5000
 setopt prompt_subst
