@@ -13,8 +13,8 @@ help() {
 
 [ "$1" ] && {
 	case $1 in
-		'install') cp $(dirname $0)/todo.sh /usr/bin/dmenu_todo && exit;;
-		'uninstall') rm -f /usr/bin/dmenu_todo && exit;;
+		'install') cp $(dirname $0)/todo.sh /usr/bin/dmenu_todo; exit;;
+		'uninstall') rm -f /usr/bin/dmenu_todo; exit;;
 		'--help' | '-h') help;;
 	esac
 }
