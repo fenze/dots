@@ -126,4 +126,5 @@ update() {
 }
 
 bindkey -s '^n' "fzf_open ^M"
-bindkey -s '^a' "fc ^M"
+bindkey -s '^e' "fc ^M"
+bindkey -s '^h' "tput cuu 1 && cd ^M"
