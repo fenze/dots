@@ -33,7 +33,14 @@ colorscheme sonokai
 hi! Normal ctermbg=8
 hi! link EndofBuffer Normal
 
-let g:LanguageClient_serverCommands = { 'c': ['clangd'], 'python': ['pylsp'] }
+let g:LanguageClient_serverCommands = {
+			\ 'c': ['clangd'],
+			\ 'python': ['pylsp'],
+			\ 'go': ['gopls']
+			\ }
+
+au BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+
 let g:LanguageClient_hoverPreview = "Never"
 let g:LanguageClient_echoProjectRoot = 0
 
