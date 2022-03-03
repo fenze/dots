@@ -4,6 +4,15 @@
 
 path="$HOME/.cache/.todo"
 
+[ -z "$1" ] || {
+	INSTALL_PATH=/usr/bin/dmenu_todo
+	case "$1" in
+		'install') (set -x; cp $0 $INSTALL_PATH);;
+		'uninstall') (set -x; rm $INSTALL_PATH);;
+	esac
+	exit
+}
+
 help() {
 	echo "usage: todo [-hv] [-fn font] [-m monitor]
 			[-nb color] [-nf color] [-sb color]
@@ -11,13 +20,6 @@ help() {
 	exit
 }
 
-[ "$1" ] && {
-	case $1 in
-		'install') cp $(dirname $0)/todo.sh /usr/bin/dmenu_todo; exit;;
-		'uninstall') rm -f /usr/bin/dmenu_todo; exit;;
-		'--help' | '-h') help;;
-	esac
-}
 
 [ -f $path ] && {
 	tasks=$(cat $path)

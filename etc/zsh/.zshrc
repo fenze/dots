@@ -90,7 +90,7 @@ fzf_open()
 	TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
 
 	# Checks is it file
-	[ -f $TARGET ] && {
+	[ -f "$TARGET" ] && {
 
 		# Checks file extension
 		[ $(printf $TARGET | sed 's/.*\././') = .pdf ] && {
