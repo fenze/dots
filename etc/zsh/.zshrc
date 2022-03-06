@@ -16,7 +16,7 @@ precmd()
 zle-keymap-select() { [[ $KEYMAP = vicmd ]] && printf '\e[2 q' || printf '\e[4 q'; }
 zle -N zle-keymap-select
 
-prompt='$([ $PWD = $HOME ] || echo "%2~ ")| '
+prompt='$([ $PWD = $HOME ] || echo "%2~ ")\$ '
 
 # Activate vim mode.
 bindkey -v
@@ -127,4 +127,4 @@ update() {
 
 bindkey -s '^n' "fzf_open ^M"
 bindkey -s '^e' "fc ^M"
-bindkey -s '^h' "tput cuu 1 && cd ^M"
+bindkey -s '^f' "tput cuu 1 && nnn ^M"
