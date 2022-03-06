@@ -30,9 +30,9 @@ KEYTIMEOUT=1
 source /usr/share/fzf/key-bindings.zsh
 
 # LS style and default options
-export LS_COLORS=$LS_COLORS:"no=0;0":"di=30;34": \
-	"ln=30;36":"so=34:pi=0;33":"ex=35":"bd=34;46":"cd=30;43": \
-	"su=30;41":"sg=30;46":"ow=30;43":"tw=30;42"
+export LS_COLORS=$LS_COLORS:"no=7;0":"di=34": \
+	"ln=32":"so=34:pi=0;33":"ex=35":"bd=34;46":"cd=30;43": \
+	"su=30;41":"sg=30;46":"ow=30;43":"tw=30;42":
 
 # ZSH completion menu with colors
 zstyle ':completion:*' list-colors ${LS_COLORS}

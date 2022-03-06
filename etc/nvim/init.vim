@@ -13,6 +13,7 @@ set nohlsearch
 set number
 set formatoptions-=cro
 
+
 filetype plugin indent on
 
 call plug#begin()
@@ -30,6 +31,7 @@ call deoplete#enable()
 call deoplete#custom#option('refresh_always', v:false)
 
 colorscheme sonokai
+source ~/.config/nvim/rosetea.vim
 hi! Normal ctermbg=8
 hi! link EndofBuffer Normal
 
