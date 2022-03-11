@@ -10,6 +10,7 @@ set tabstop=2
 set shiftwidth=2
 set ignorecase
 set nohlsearch
+set et
 set number
 set formatoptions-=cro
 
@@ -25,15 +26,18 @@ call plug#begin()
 	Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	Plug 'preservim/nerdcommenter'
+	Plug 'cakebaker/scss-syntax.vim'
 call plug#end()
 
 call deoplete#enable()
 call deoplete#custom#option('refresh_always', v:false)
 
 colorscheme sonokai
-source ~/.config/nvim/rosetea.vim
 hi! Normal ctermbg=8
 hi! link EndofBuffer Normal
+au BufRead,BufNewFile *.scss set filetype=scss.css
+au BufWrite *.sass sil :!sassc %:p %:p:h/style.css
+
 
 let g:LanguageClient_serverCommands = {
 			\ 'c': ['clangd'],

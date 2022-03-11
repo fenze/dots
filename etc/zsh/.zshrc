@@ -35,8 +35,47 @@ export LS_COLORS=$LS_COLORS:"no=7;0":"di=34": \
 	"su=30;41":"sg=30;46":"ow=30;43":"tw=30;42":
 
 # ZSH completion menu with colors
-zstyle ':completion:*' list-colors ${LS_COLORS}
+zstyle ':completion:*' list-colors $LS_COLORS
 zstyle ':completion:*' menu select
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+zstyle ':completion:*' verbose yes
+zstyle ':completion::complete:*' use-cache on
+zstyle ':completion:*:*:*:*:processes' command'ps -u $USER -o pid,user,comm,cmd -w -w'
+zstyle ':completion:*:exa' file-sort modification
+zstyle ':completion:*:exa' sort false
+
+setopt complete_in_word
+setopt always_to_end
+setopt path_dirs
+setopt auto_menu
+setopt auto_list
+setopt auto_param_slash
+setopt menu_complete
+
+# History
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+setopt hist_ignore_space
+setopt inc_append_history
+
+# better url management
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+# history substring search
+zle -N history-substring-search-up
+zle -N history-substring-search-down
+
+bindkey '^[[1;5C' forward-word                    # ctrl + ->
+bindkey '^[[1;5D' backward-word                   # ctrl + <-
 
 # nvim as default editor
 export EDITOR='nvim'
@@ -68,6 +107,16 @@ alias rm='rm -rf'
 # cmd tries to cd
 setopt auto_cd
 
+# spelling correction
+setopt correct
+
+# Ignore lines prefixed with '#'
+setopt interactivecomments
+
+# Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'
+setopt rc_quotes
+
+
 # FZF default options to improve speed
 export FZF_DEFAULT_COMMAND='find . | grep -v ".git\|.node_modules\|.cache" && tput cuu 2'
 
@@ -85,7 +134,7 @@ export FZF_DEFAULT_OPTS='
 fzf_open()
 {
 	# Remove 2 lines to cleaner look
-	tput cuu 2
+	tput cuu 1
 
 	TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
 

@@ -1,5 +1,6 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 exec feh --no-fehbg --bg-fill ~/.config/img/wallpaper.jpg &
 exec barrierc -1 --disable-crypto --no-tray computer &
+exec dunst &
 exec picom --experimental-backends &
 exec dwm
