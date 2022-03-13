@@ -1,11 +1,7 @@
+dots
+----
+
 Configs of my enviroment that helps me improve my workflow and productivity.
 
-Programs that i am using:
-  sh: zsh
-  wm: dwm
-  os: Arch
-  term: st
-  font: SF Mono
-  editor: neovim
-  launcher: dmenu
-  browser: chrome
+Copyright (c) 2022 fenze <contact@fenze.dev>.
+All rights reserved. See license for more information.
