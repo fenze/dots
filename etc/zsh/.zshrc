@@ -13,10 +13,13 @@ precmd()
 }
 
 # Different cursor for vim modes
-zle-keymap-select() { [[ $KEYMAP = vicmd ]] && printf '\e[2 q' || printf '\e[4 q'; }
+zle-keymap-select() {
+  [[ $KEYMAP = vicmd ]] && printf '\e[2 q' || printf '\e[5 q'
+}
+
 zle -N zle-keymap-select
 
-prompt='$([ $PWD = $HOME ] || echo "%2~ ")\$ '
+prompt='$([ $PWD = $HOME ] || echo "%2~")%# '
 
 # Activate vim mode.
 bindkey -v
@@ -95,6 +98,7 @@ alias gr='git remotes'
 alias gc='git commit'
 alias gs='git status --short'
 alias gp='git push --quiet'
+alias gd='git diff --minimal'
 
 # config aliases
 alias envc='cd ~/.config/env/'

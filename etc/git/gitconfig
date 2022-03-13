@@ -1,21 +1,26 @@
 [user]
-	name = fenze
-	email = contact@fenze.dev
+  name = fenze
+  email = contact@fenze.dev
+  signingkey = A68F62254F5AEFCF
 
 [push]
-	default = simple
+  default = simple
 
 [commit]
-    	gpgsign = true
+  gpgsign = true
 
 [init]
-	defaultBranch = master
+  defaultBranch = master
 
 [alias]
-    	contrib = shortlog -n -s
-    	remotes = remote -v
-    	praise = blame
-	verify = log --show-signature
+  contrib = shortlog -n -s
+  remotes = remote -v
+  praise = blame
+  verify = log --show-signature
+  patch = apply --reject
 
 [push]
-	default = current
+  default = current
+
+[pull]
+  rebase = false
