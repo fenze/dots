@@ -146,6 +146,7 @@ fzf_open()
 
 			# Open with default pdf app
 			xdg-open $TARGET
+
 		} || {
 
 			# Open with default editor
@@ -160,18 +161,39 @@ fzf_open()
 
 # Update nvim plugins, pacman/yay packages
 update() {
-	echo "Updating: Neovim plugins"
-	$(nvim -c PlugUpdate -c qa! &> /dev/null) \
-		&& tput cuu 1 \
-		&& echo "Neovim: plugins update done."
+	echo "Updating: neovim plugins..." && {
+    $(nvim -c PlugUpdate -c qa! &> /dev/null) && {
+      tput cuu 1
+      echo "Neovim: Cleaning..."
+    }
 
-	echo "Updating: pacman" && \
-		$(doas pacman -Syyu --quiet --noconfirm &> /dev/null) \
-			&& tput cuu 1 && echo "Pacman: packages update done."
+    $(nvim -c PlugClean -c qa! &> /dev/null) && {
+      tput cuu 1
+      echo "Neovim: plugins update done."
+    }
+  }
 
-	echo "Updating: yay" && \
-		$(doas yay -Syyu --quiet --noconfirm &> /dev/null) \
-			&& tput cuu 1 && echo "yay: packages update done."
+	echo "Updating: pacman packages..." && {
+		$(doas pacman -Syyu --quiet --noconfirm &> /dev/null) && {
+      tput cuu 1
+      echo "Pacman: Cleaning..."
+      $(echo "y\ny" | doas pacman -Scc &> /dev/null) && {
+        tput cuu 1
+        echo "Pacman: packages update done."
+      }
+    }
+  }
+
+	echo "Updating: yay packages" && {
+		$(doas yay -Syyu --quiet --noconfirm &> /dev/null) && {
+			tput cuu 1
+      echo "yay: Cleaning..."
+      $(echo "y\ny\ny" | doas yay -Scc &> /dev/null) && {
+			  tput cuu 1
+        echo "yay: packages update done."
+      }
+    }
+  }
 }
 
 bindkey -s '^n' "fzf_open ^M"
