@@ -19,7 +19,7 @@ zle-keymap-select() {
 
 zle -N zle-keymap-select
 
-prompt='$([ $PWD = $HOME ] || echo "%2~")%# '
+prompt='$([ $PWD = $HOME ] || echo "%2~ ")› '
 
 # Activate vim mode.
 bindkey -v
@@ -47,7 +47,6 @@ zstyle ':completion:*:options' auto-description '%d'
 zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
 zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-zstyle ':completion:*' verbose yes
 zstyle ':completion::complete:*' use-cache on
 zstyle ':completion:*:*:*:*:processes' command'ps -u $USER -o pid,user,comm,cmd -w -w'
 zstyle ':completion:*:exa' file-sort modification
@@ -76,9 +75,6 @@ zle -N self-insert url-quote-magic
 # history substring search
 zle -N history-substring-search-up
 zle -N history-substring-search-down
-
-bindkey '^[[1;5C' forward-word                    # ctrl + ->
-bindkey '^[[1;5D' backward-word                   # ctrl + <-
 
 # nvim as default editor
 export EDITOR='nvim'

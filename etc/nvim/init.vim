@@ -4,7 +4,6 @@ set fillchars=eob:\ ,
 set laststatus=0
 set noruler
 set noswapfile
-set noshowmode
 set clipboard=unnamedplus
 set tabstop=2
 set shiftwidth=2
@@ -13,7 +12,8 @@ set nohlsearch
 set et
 set number
 set formatoptions-=cro
-
+set list
+set scrolloff=10
 
 filetype plugin indent on
 
@@ -39,11 +39,7 @@ au BufRead,BufNewFile *.scss set filetype=scss.css
 au BufWrite *.sass sil :!sassc %:p %:p:h/style.css
 
 
-let g:LanguageClient_serverCommands = {
-			\ 'c': ['clangd'],
-			\ 'python': ['pylsp'],
-			\ 'go': ['gopls']
-			\ }
+let g:LanguageClient_serverCommands = { 'c': ['clangd'], 'python': ['pylsp'], 'go': ['gopls'] }
 
 au BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
 
