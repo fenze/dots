@@ -14,19 +14,20 @@ set number
 set formatoptions-=cro
 set list
 set scrolloff=10
+set nowrap
 
 filetype plugin indent on
 
 call plug#begin()
-	Plug 'sainnhe/sonokai'
-	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-	Plug 'junegunn/fzf.vim'
-	Plug 'tpope/vim-fugitive'
-	Plug 'suxpert/vimcaps'
-	Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	Plug 'preservim/nerdcommenter'
-	Plug 'cakebaker/scss-syntax.vim'
+  Plug 'sainnhe/sonokai'
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  Plug 'junegunn/fzf.vim'
+  Plug 'tpope/vim-fugitive'
+  Plug 'suxpert/vimcaps'
+  Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'preservim/nerdcommenter'
+  Plug 'cakebaker/scss-syntax.vim'
 call plug#end()
 
 call deoplete#enable()
@@ -36,12 +37,11 @@ colorscheme sonokai
 hi! Normal ctermbg=8
 hi! link EndofBuffer Normal
 au BufRead,BufNewFile *.scss set filetype=scss.css
-au BufWrite *.sass sil :!sassc %:p %:p:h/style.css
-
 
 let g:LanguageClient_serverCommands = { 'c': ['clangd'], 'python': ['pylsp'], 'go': ['gopls'] }
 
 au BufWritePre *.go :call LanguageClient#textDocument_formatting_sync()
+au! BufWritePost *.sass :!sassc "%:p" "%:p:h/style.css"
 
 let g:LanguageClient_hoverPreview = "Never"
 let g:LanguageClient_echoProjectRoot = 0

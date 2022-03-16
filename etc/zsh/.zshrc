@@ -6,10 +6,10 @@ autoload -Uz compinit
 
 precmd()
 {
-	# Autocomplete
-	compinit
-	# Insert cursor
-	zle-keymap-select
+  # Autocomplete
+  compinit
+  # Insert cursor
+  zle-keymap-select
 }
 
 # Different cursor for vim modes
@@ -34,14 +34,15 @@ source /usr/share/fzf/key-bindings.zsh
 
 # LS style and default options
 export LS_COLORS=$LS_COLORS:"no=7;0":"di=34": \
-	"ln=32":"so=34:pi=0;33":"ex=35":"bd=34;46":"cd=30;43": \
-	"su=30;41":"sg=30;46":"ow=30;43":"tw=30;42":
+  "ln=32":"so=34:pi=0;33":"ex=35":"bd=34;46":"cd=30;43": \
+  "su=30;41":"sg=30;46":"ow=30;43":"tw=30;42":
 
 # ZSH completion menu with colors
 zstyle ':completion:*' list-colors $LS_COLORS
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
 zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
@@ -100,7 +101,7 @@ alias gd='git diff --minimal'
 alias envc='cd ~/.config/env/'
 alias vc='v ~/.config/nvim/init.vim'
 
-# most useless alias
+# most useless aliases
 alias rm='rm -rf'
 
 # If no executable
@@ -115,7 +116,6 @@ setopt interactivecomments
 
 # Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'
 setopt rc_quotes
-
 
 # FZF default options to improve speed
 export FZF_DEFAULT_COMMAND='find . | grep -v ".git\|.node_modules\|.cache" && tput cuu 2'
@@ -133,35 +133,35 @@ export FZF_DEFAULT_OPTS='
 # files/dictonaries
 fzf_open()
 {
-	# Remove 2 lines to cleaner look
-	tput cuu 1
+  # Remove 2 lines to cleaner look
+  tput cuu 1
 
-	TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
+  TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
 
-	# Checks is it file
-	[ -f "$TARGET" ] && {
+  # Checks is it file
+  [ -f "$TARGET" ] && {
 
-		# Checks file extension
-		[ $(printf $TARGET | sed 's/.*\././') = .pdf ] && {
+    # Checks file extension
+    [ $(printf $TARGET | sed 's/.*\././') = .pdf ] && {
 
-			# Open with default pdf app
-			xdg-open $TARGET
+      # Open with default pdf app
+      xdg-open $TARGET
 
-		} || {
+    } || {
 
-			# Open with default editor
-			$EDITOR $TARGET ^M
-		}
-	} || {
+      # Open with default editor
+      $EDITOR $TARGET ^M
+    }
+  } || {
 
-		# If target is dictonary
-		[ -d $TARGET ] && cd $TARGET
-	}
+    # If target is dictonary
+    [ -d $TARGET ] && cd $TARGET
+  }
 }
 
 # Update nvim plugins, pacman/yay packages
 update() {
-	echo "Updating: neovim plugins..." && {
+  echo "Updating: neovim plugins..." && {
     $(nvim -c PlugUpdate -c qa! &> /dev/null) && {
       tput cuu 1
       echo "Neovim: Cleaning..."
@@ -173,8 +173,8 @@ update() {
     }
   }
 
-	echo "Updating: pacman packages..." && {
-		$(doas pacman -Syyu --quiet --noconfirm &> /dev/null) && {
+  echo "Updating: pacman packages..." && {
+    $(doas pacman -Syyu --quiet --noconfirm &> /dev/null) && {
       tput cuu 1
       echo "Pacman: Cleaning..."
       $(echo "y\ny" | doas pacman -Scc &> /dev/null) && {
@@ -184,12 +184,12 @@ update() {
     }
   }
 
-	echo "Updating: yay packages" && {
-		$(doas yay -Syyu --quiet --noconfirm &> /dev/null) && {
-			tput cuu 1
+  echo "Updating: yay packages" && {
+    $(doas yay -Syyu --quiet --noconfirm &> /dev/null) && {
+      tput cuu 1
       echo "yay: Cleaning..."
       $(echo "y\ny\ny" | doas yay -Scc &> /dev/null) && {
-			  tput cuu 1
+        tput cuu 1
         echo "yay: packages update done."
       }
     }
