@@ -15,19 +15,18 @@
   exit
 }
 
-get_passwd() {
+login() {
   PASSWORD=$(printf "" | dmenu -p 'Password:' -nb "#0f0f0f" -nf "#0f0f0f")
-  LIST=$(echo $PASSWORD | bw list items || get_passwd)
-  echo $(echo $LIST | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
+  LIST=$(echo $PASSWORD | bw list items 2> /dev/null) || login && {
+    LOGIN=$(echo $LIST | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
+    [ -z "$LOGIN" ] && exit
+    case $(printf 'Login\nPassword' | dmenu -p "Copy:") in
+      "Login") echo $LOGIN | xclip -sel clip;;
+      "Password")
+        echo $PASSWORD | bw get password $LOGIN | xclip -sel clip
+        sleep 30 && echo -n "" | xclip -selection clipboard -r &;;
+    esac
+  }
 }
 
-LOGIN=$(get_passwd)
-
-[ -z "$LOGIN" ] && exit
-
-case $(printf 'Login\nPassword' | dmenu -p "Copy:") in
-  "Login") echo $LOGIN | xclip -sel clip;;
-  "Password")
-    echo $PASSWORD | bw get password $LOGIN | xclip -sel clip
-    sleep 30 && echo -n "" | xclip -selection clipboard -r &;;
-esac
+login
