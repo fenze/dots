@@ -19,7 +19,7 @@ zle-keymap-select() {
 
 zle -N zle-keymap-select
 
-prompt='$([ $PWD = $HOME ] || echo "%2~ ")› '
+prompt='$([ $PWD = $HOME ] || echo "[%2~] ")› '
 
 # Activate vim mode.
 bindkey -v
