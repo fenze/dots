@@ -13,7 +13,7 @@ precmd()
 export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
-prompt='$([ $PWD = $HOME ] || echo "[%2~] ")> '
+prompt='$([ $PWD = $HOME ] || echo "%~ ")› '
 
 # Activate vim mode.
 bindkey -v
@@ -28,8 +28,8 @@ source /usr/share/fzf/key-bindings.zsh
 
 # LS style and default options
 export LS_COLORS=$LS_COLORS:"no=7;0":"di=34": \
-  "ln=32":"so=34:pi=0;33":"ex=35":"bd=34;46":"cd=30;43": \
-  "su=30;41":"sg=30;46":"ow=30;43":"tw=30;42":
+	"ln=32":"so=34:pi=0;33":"ex=3":"bd=34;46":"cd=30;43": \
+	"su=30;41":"sg=30;46":"ow=30;43":"tw=30;42":
 
 # ZSH completion menu with colors
 zstyle ':completion:*' list-colors $LS_COLORS
@@ -77,8 +77,8 @@ export EDITOR='nvim'
 alias v='nvim'
 
 # ls aliases
-alias ls='ls --color=always'
-alias la='ls -lAhG --group-directories-first | sed /^total/d'
+alias ls='exa --color=always'
+alias la='ls -l --group-directories-first --git-ignore --git --no-time --no-user'
 alias lr='ls -R'
 
 # git aliases
@@ -90,11 +90,19 @@ alias gr='git remotes'
 alias gc='git commit'
 alias gs='git status --short'
 alias gp='git push --quiet'
+alias gpp='git pull --no-commit'
 alias gd='git diff --minimal'
-
+alias gl='git log --oneline'
+alias bat='bat --theme=ansi'
 # doas
 alias 'doas=doas '
 alias d='doas '
+
+alias reload='source ~/.config/zsh/.zshrc'
+
+alias dev='cd ~/dev'
+alias tmp='cd ~/tmp'
+alias sys='cd ~/sys'
 
 # most useless aliases
 alias rm='rm -rf'
@@ -116,10 +124,10 @@ setopt rc_quotes
 # prevents you from accidentally overwriting an existing file.
 setopt noclobber
 
-FIND_EXCEPTIONS='.git\|.node_modules\|.cache\|.css\|.java\|.android\|.local'
+FIND_EXCEPTIONS='.git\|.node_modules\|.cache\|.css\|.java\|.android\|.local\|.gradle\|google'
 
 # FZF default options to improve speed
-export FZF_DEFAULT_COMMAND="find . -type f | grep -v $FIND_EXCEPTIONS"
+export FZF_DEFAULT_COMMAND="find . -type f | grep -iv $FIND_EXCEPTIONS"
 
 # FZF appearance
 export FZF_DEFAULT_OPTS='
@@ -170,13 +178,11 @@ fzf_open()
 update() {
   echo "Updating: neovim plugins..." && {
     $(nvim -c PlugUpdate -c qa! &> /dev/null) && {
-      tput cuu 1
-      echo "Neovim: Cleaning..."
+      tput cuu 1 && echo "Neovim: Cleaning...\r"
     }
 
     $(nvim -c PlugClean -c qa! &> /dev/null) && {
-      tput cuu 1
-      echo "Neovim: plugins update done."
+      tput cuu 1 && echo "Neovim: plugins update done."
     }
   }
 

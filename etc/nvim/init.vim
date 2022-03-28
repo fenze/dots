@@ -22,7 +22,6 @@ set noshowcmd
 set splitbelow splitright
 set shortmess+=W
 set guicursor=n-v-c:block-Cursor
-set mouse=a
 set noshowmode
 
 syntax on
@@ -38,15 +37,13 @@ cal plug#begin()
 	Plug 'cakebaker/scss-syntax.vim'
 	Plug 'ap/vim-css-color'
 	Plug 'aperezdc/vim-template'
-	Plug 'neomake/neomake'
 	Plug 'jiangmiao/auto-pairs'
-	Plug 'rhysd/committia.vim'
 	Plug 'vshih/vim-make'
 	Plug 'jelera/vim-javascript-syntax'
 	Plug 'othree/javascript-libraries-syntax.vim'
+	Plug 'nvim-lua/plenary.nvim'
+	Plug 'sindrets/diffview.nvim'
 cal plug#end()
-
-call neomake#configure#automake('nrwi', 500)
 
 cal deoplete#enable()
 cal deoplete#custom#option('refresh_always', v:false)

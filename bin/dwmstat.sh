@@ -8,7 +8,6 @@ WIFI() {
 	[ -z "$NET" ] || echo  ""
 }
 
-
 BAT() {
 	STATUS=$(cat /sys/class/power_supply/BAT0/status)
 
@@ -34,7 +33,7 @@ UPDATES() {
 	updates=$(printf "$(yay -Qu && checkupdates)" 2> /dev/null | wc -l)
 
 	[ "0" = "$updates" ] || {
-		exec dwm -s "↑ $updates ┆ $(VOL)  $(BAT)  $(WIFI) ┆  $(date +%H:%M) "
+		exec dwm -s "↑ $updates   $(VOL)  $(BAT)  $(WIFI)    $(date +%H:%M) "
 	}
 }
 
@@ -44,7 +43,7 @@ VOL() {
 		[ -z "$bluetooth" ] && {
 			list=$(pactl list sinks)
 			volume=$(echo "$list" | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,')
-			mute=$(echo "$list" | grep Mute | awk -F: '{print $2}')
+			mute=$(echo "$list" | grep Mute | cut -f2 -d" ")
 
 			[ "$mute" = yes ] && echo "婢" || {
 					[ -z "volume" ] && {
@@ -58,15 +57,15 @@ VOL() {
 						7* | 8* | 9* | 1*) echo  && exit;;
 					esac
 
-				} || {
-					echo 
-				}
 			}
+		} || {
+			echo 
+		}
 }
 
 case $1 in
     "install") cp -u ./status.sh /usr/bin/status;;
     "uninstall") rm -f /usr/bin/status;;
-		"with updates") exec dwm -s "$(VOL)  $(BAT)  $(WIFI) ┆  $(date +%H:%M) " & UPDATES && exit;;
-		*) exec dwm -s "$(VOL)  $(BAT)  $(WIFI) ┆  $(date +%H:%M) ";;
+		"with updates") exec dwm -s "$(VOL)  $(BAT)  $(WIFI)    $(date +%H:%M) " & UPDATES && exit;;
+		*) exec dwm -s "$(VOL)  $(BAT)  $(WIFI)    $(date +%H:%M) " && exit;;
 esac
