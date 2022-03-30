@@ -19,7 +19,7 @@ zle-keymap-select() {
 
 zle -N zle-keymap-select
 
-prompt='$([ $PWD = $HOME ] || echo "[%2~] ")› '
+prompt='$([ $PWD = $HOME ] || echo "[%2~] ")> '
 
 # Activate vim mode.
 bindkey -v
@@ -76,7 +76,7 @@ zle -N self-insert url-quote-magic
 
 # history substring search
 zle -N history-substring-search-up
-zle -N history-substring-search-down
+# zle -N history-substring-search-down
 
 # nvim as default editor
 export EDITOR='nvim'
@@ -98,9 +98,9 @@ alias gs='git status --short'
 alias gp='git push --quiet'
 alias gd='git diff --minimal'
 
-# config aliases
-alias envc='cd ~/.config/env/'
-alias vc='v ~/.config/nvim/init.vim'
+# doas
+alias 'doas=doas '
+alias d='doas '
 
 # most useless aliases
 alias rm='rm -rf'
@@ -111,6 +111,7 @@ setopt auto_cd
 
 # spelling correction
 setopt correct
+setopt correct_all
 
 # Ignore lines prefixed with '#'
 setopt interactivecomments
@@ -118,15 +119,20 @@ setopt interactivecomments
 # Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'
 setopt rc_quotes
 
+# prevents you from accidentally overwriting an existing file.
+setopt noclobber
+
 # FZF default options to improve speed
 export FZF_DEFAULT_COMMAND='find . | grep -v ".git\|.node_modules\|.cache" && tput cuu 2'
 
 # FZF appearance
 export FZF_DEFAULT_OPTS='
-  --reverse
-  --info hidden
-  --color fg:249,bg:0,hl:2,fg+:249,bg+:0,hl+:2
-  --color info:6,prompt:249,spinner:7,pointer:1,marker:0,header:#586e75
+	--color bg+:#1E1E2E,bg:#1E1E2E,spinner:#F8BD96,hl:#F28FAD
+	--color fg:#D9E0EE,header:#F28FAD,info:#DDB6F2,pointer:#F8BD96
+	--color=marker:#F8BD96,fg+:#F2CDCD,prompt:#DDB6F2,hl+:#F28FAD
+	--reverse
+	--no-bold
+	--info hidden
 '
 
 # My own fzf script
@@ -139,7 +145,6 @@ fzf_open()
   tput cuu 1
 
   TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
-
   [ -z $TARGET ] && exit
 
   # Checks is it file

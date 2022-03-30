@@ -1,5 +1,5 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
-exec feh --no-fehbg --bg-fill ~/.config/img/wallpaper.jpg &
+exec feh --no-fehbg --bg-fill ~/.config/img/wallpaper.png &
 exec barrierc -1 --disable-crypto --no-tray computer &
 exec dunst &
 while true; do status && sleep 30; done &
