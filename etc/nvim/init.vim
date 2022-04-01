@@ -28,6 +28,7 @@ cal plug#begin()
 	Plug 'preservim/nerdcommenter'
 	Plug 'cakebaker/scss-syntax.vim'
 	Plug 'ap/vim-css-color'
+	Plug 'aperezdc/vim-template'
 cal plug#end()
 
 cal deoplete#enable()
@@ -42,7 +43,9 @@ let g:LanguageClient_serverCommands = { 'c': ['clangd'], 'python': ['pylsp'] }
 
 au BufWritePost *.sass !sassc "%:p" "%:p:h/style.css"
 
+let g:email = "contact@fenze.dev"
 let g:LanguageClient_hoverPreview = "Never"
+
 let g:LanguageClient_echoProjectRoot = 0
 nmap <silent> gd <Plug>(lcn-definition)
 nmap <silent> <F2> <Plug>(lcn-rename)
@@ -63,6 +66,11 @@ ino ( ()<left>
 ino { {}<left>
 ino {;<cr> {<cr><cr>};<up><tab>
 ino {<cr> {<cr><cr>}<up><tab>
+
+nm <c-h> <C-w>h
+nm <c-j> <C-w>j
+nm <c-k> <C-w>k
+nm <c-l> <C-w>l
 
 let g:fzf_colors = {
 	\ 'fg':         ['fg', 'Normal'],
