@@ -14,6 +14,7 @@ set formatoptions-=cro
 set list
 set scrolloff=10
 set nowrap
+set cursorline
 
 syntax on
 filetype plugin indent on
@@ -55,6 +56,13 @@ nm <c-h> :History   <cr>
 nm <c-c> :Commits   <cr>
 nm <s-c> :History:	<cr>
 nm <space> /
+
+ino " ""<left>
+ino ' ''<left>
+ino ( ()<left>
+ino { {}<left>
+ino {;<cr> {<cr><cr>};<up><tab>
+ino {<cr> {<cr><cr>}<up><tab>
 
 let g:fzf_colors = {
 	\ 'fg':         ['fg', 'Normal'],
