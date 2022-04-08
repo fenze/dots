@@ -10,18 +10,29 @@
 	esac
 }
 
-CFG='-x 10 -y 10 -z 1900'
-SELECT=$(nmcli -g SSID,BARS device wifi list | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu -p "Connect to:" $CFG)
+networks() {
+	printf "$(nmcli -g SSID,BARS device wifi list)\n rescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
+}
 
-[ -z "$SELECT" ] && exit
+is_known() {
+	echo $(doas cat /etc/NetworkManager/system-connections/"$1".nmconnection | grep psk= | cut -d "=" -f2)
+}
 
-passwd() {
-	PASSWORD=$(echo | dmenu -p "Password:" -P $CFG)
-	[ -z "$PASSWORD" ] && {
-		doas nmcli d w c $(echo $SELECT | cut -f1 -d" ")
+connect_to() {
+	LENGHT=$(expr $(echo "$1" | wc -w) - 1)
+	SSID=$(echo "$1" | cut -f-$LENGHT -d" ")
+
+	[ -z "$(is_known $1)" ] && {
+		PASSWORD=$(echo | dmenu -p "Password:" -P)
+		nmcli d w c $SSID password $PASSWORD
 	} || {
-		doas nmcli d w c $(echo $SELECT | cut -f1 -d" ") password "$PASSWORD"
+		nmcli d w c $SSID
 	}
 }
 
-passwd
+SELECT=$(networks)
+
+case $SELECT in
+	*rescan*) nmcli d w r && $($0) & exit;;
+	*) connect_to "$SELECT";;
+esac

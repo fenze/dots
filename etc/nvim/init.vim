@@ -57,7 +57,7 @@ nm <c-f> :Rg        <cr>
 nm <c-n> :Files     <cr>
 nm <c-h> :History   <cr>
 nm <c-c> :Commits   <cr>
-nm <s-c> :History:	<cr>
+" "nm <s-c> :History:	<cr>
 nm <space> /
 
 ino " ""<left>

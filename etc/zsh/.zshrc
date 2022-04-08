@@ -127,7 +127,7 @@ export FZF_DEFAULT_COMMAND='find . | grep -v ".git\|.node_modules\|.cache" && tp
 
 # FZF appearance
 export FZF_DEFAULT_OPTS='
-	--color bg+:#1E1E2E,bg:#1E1E2E,spinner:#F8BD96,hl:#F28FAD
+	--color bg+:-1,bg:-1,spinner:#F8BD96,hl:#F28FAD
 	--color fg:#D9E0EE,header:#F28FAD,info:#DDB6F2,pointer:#F8BD96
 	--color=marker:#F8BD96,fg+:#F2CDCD,prompt:#DDB6F2,hl+:#F28FAD
 	--reverse
@@ -144,7 +144,7 @@ fzf_open()
   # to cleaner look
   tput cuu 1
 
-  TARGET=$(fzf --reverse --height 40% --preview "bat --color=always --style=numbers {}")
+	TARGET=$(fzf --reverse --height 40%)
   [ -z $TARGET ] && exit
 
   # Checks is it file
