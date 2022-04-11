@@ -1,7 +1,7 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
-exec feh --no-fehbg --bg-fill ~/.config/img/wallpaper.jpg &
-exec barrierc -1 --disable-crypto --no-tray computer &
+exec feh --no-fehbg --bg-fill ~/sys/dots/etc/wallpaper/wallpaper.png &
+barrierc -1 --disable-crypto --no-tray computer &
 exec dunst &
-while true; do status && sleep 10; done &
+while true; do status "with updates" && sleep 60; done &
 exec picom --experimental-backends &
 exec dwm

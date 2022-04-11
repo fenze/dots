@@ -8,16 +8,10 @@ precmd()
 {
   # Autocomplete
   compinit
-  # Insert cursor
-  zle-keymap-select
 }
 
-# Different cursor for vim modes
-zle-keymap-select() {
-  [[ $KEYMAP = vicmd ]] && printf '\e[2 q' || printf '\e[5 q'
-}
-
-zle -N zle-keymap-select
+export HISTORY_IGNORE="(ls|cd|pwd|exit|sudo reboot|history|cd -|cd ..)"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 prompt='$([ $PWD = $HOME ] || echo "[%2~] ")> '
 
@@ -122,17 +116,18 @@ setopt rc_quotes
 # prevents you from accidentally overwriting an existing file.
 setopt noclobber
 
+FIND_EXCEPTIONS='.git\|.node_modules\|.cache\|.css\|.java\|.android\|.local'
+
 # FZF default options to improve speed
-export FZF_DEFAULT_COMMAND='find . | grep -v ".git\|.node_modules\|.cache" && tput cuu 2'
+export FZF_DEFAULT_COMMAND="find . -type f | grep -v $FIND_EXCEPTIONS"
 
 # FZF appearance
 export FZF_DEFAULT_OPTS='
-	--color bg+:-1,bg:-1,spinner:#F8BD96,hl:#F28FAD
-	--color fg:#D9E0EE,header:#F28FAD,info:#DDB6F2,pointer:#F8BD96
-	--color=marker:#F8BD96,fg+:#F2CDCD,prompt:#DDB6F2,hl+:#F28FAD
-	--reverse
+	--color bg+:-1,bg:-1,spinner:#F8BD96,hl:#FFFFFF
+	--color fg:#999999,header:#F28FAD,info:#FFFFFF,pointer:#FFFFFF
+	--color=marker:#FFFFFF,fg+:#F2CDCD,prompt:#FFFFFF,hl+:#E8A2AF
 	--no-bold
-	--info hidden
+	--inline-info
 '
 
 # My own fzf script
@@ -142,10 +137,17 @@ fzf_open()
 {
   # Remove 2 lines
   # to cleaner look
-  tput cuu 1
+  tput cuu 2
 
-	TARGET=$(fzf --reverse --height 40%)
-  [ -z $TARGET ] && exit
+	[ "$1" = '-type d'  ] && {
+		TARGET=$(find . -type d | grep -v $FIND_EXCEPTIONS | fzf --reverse --height 40%)
+	}
+
+	[ "$1" = '-type f' ] && {
+		TARGET=$(find . -type f | grep -v $FIND_EXCEPTIONS | fzf --reverse --height 40%)
+	}
+
+  [ -z $TARGET ] && return
 
   # Checks is it file
   [ -f $TARGET ] && {
@@ -202,6 +204,6 @@ update() {
 }
 
 # Bindings
-bindkey -s '^n' "fzf_open ^M"
-bindkey -s '^e' "fc ^M"
-bindkey -s '^f' "tput cuu 1 && nnn ^M"
+bindkey -s '^k' "fzf_open '-type d'^M"
+bindkey -s '^n' "fzf_open '-type f'^M"
+bindkey -ar ':'

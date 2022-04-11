@@ -1,6 +1,5 @@
-#!/bin/sh
-# Author: fenze <contact@fenze.dev>
-# Simple todo list with dmenu
+# Copyright (c) 2022 fenze <contact@fenze.dev>
+# See license for more information.
 
 path="$HOME/.cache/.todo"
 

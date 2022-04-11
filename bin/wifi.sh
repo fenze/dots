@@ -11,7 +11,7 @@
 }
 
 networks() {
-	printf "$(nmcli -g SSID,BARS device wifi list)\n rescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
+	printf "$(nmcli -g SSID,BARS device wifi list)\npower off\nrescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
 }
 
 is_known() {
@@ -30,7 +30,17 @@ connect_to() {
 	}
 }
 
+STATUS=$(nmcli r w)
+
+[ "$STATUS" = disabled ] && {
+	[ "$(echo "power on" | dmenu)" = power\ on ] && nmcli r w on
+}
+
 SELECT=$(networks)
+
+[ -z "$SELECT" ] && exit
+
+[ "$SELECT" = "power off" ] && nmcli r w off && exit
 
 case $SELECT in
 	*rescan*) nmcli d w r && $($0) & exit;;

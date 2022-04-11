@@ -2,20 +2,19 @@
 # See license for more information.
 
 STATUS="Password:"
-CFG='-x 10 -y 10 -z 1900'
 
 login() {
 
-	PASSWORD=$(printf "" | dmenu -p $STATUS $CFG -P)
+	PASSWORD=$(printf "" | dmenu -p $STATUS -P)
 
 	[ -z "$PASSWORD" ] && exit
 
 	LIST=$(echo $PASSWORD | bw list items 2> /dev/null) || login && {
-		LOGIN=$(echo $LIST | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu $CFG)
+		LOGIN=$(echo $LIST | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
 
 		[ -z "$LOGIN" ] && exit
 
-		case $(printf 'Login\nPassword' | dmenu -p "Copy:" $CFG) in
+		case $(printf 'Login\nPassword' | dmenu -p "Copy:" ) in
 			"Login")
 				echo $LOGIN | xclip -sel clip
 				exit;;

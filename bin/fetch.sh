@@ -1,5 +1,5 @@
-# Author: fenze <contact@fenze.dev>
-# Simple fetch for arch linux
+# Copyright (c) 2022 fenze <contact@fenze.dev>
+# See license for more information.
 
 [ -z "$1" ] || {
 	INSTALL_PATH=/usr/bin/fetch
