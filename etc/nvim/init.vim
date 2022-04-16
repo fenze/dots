@@ -60,7 +60,7 @@ let g:LanguageClient_serverCommands = {
 	\ 'c': ['clangd'],
 	\ 'python': ['pylsp'],
 	\ 'javascript': ['typescript-language-server', '--stdio'] }
-au BufWritePost *.sass silent !sassc "%:p" "%:p:h/style.css"
+au BufWritePost *.sass silent !sassc "%:p" "%:p:h/%:r.css"
 
 setlocal omnifunc=LanguageClient#complete
 

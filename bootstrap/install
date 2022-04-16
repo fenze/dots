@@ -1,0 +1,25 @@
+#!/bin/sh
+
+SCRIPT_PATH=$(dirname $0)
+CONFIG="$SCRIPT_PATH/config"
+
+[ -f $CONFIG ] && {
+	for MODULE in $(cat $CONFIG)
+	do
+		cp -fr ../$SCRIPT_PATH/etc/$MODULE ~/.config/ && {
+			printf "\033[92mDONE\033[00m: $MODULE config installed\n"
+		} || {
+			printf "\033[91mERROR\033[00m: $MODULE installation failed\n"
+		}
+	done
+} || {
+	read -p "Are you sure to install all configs? [Y/n]" ANSWER
+
+	[ "$ANSWER" = y ] || [ -z "$ANSWER" ] && {
+		cp -ufr ../$SCRIPT_PATH/etc/* ~/.config/ && {
+			printf "\033[92mDONE\033[00m: configs installed\n"
+		} || {
+			printf "\033[91mERROR\033[00m: installation failed\n"
+		}
+	}
+}

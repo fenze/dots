@@ -1,0 +1,15 @@
+#!/bin/sh
+
+MODULES=(
+	'feh'\ 'fonts'\ 'git'\ 'nvim'\ 'picom'\ 'wallpaper'\ 'xinit'\ 'zathura'\ 'zsh'
+)
+
+for MODULE in $MODULES
+do
+	read -p "Include to install $MODULE? [Y/n] " ANSWER
+
+	[ "$ANSWER" = y ] || [ -z "$ANSWER" ] && {
+		echo "$MODULE" >> ./config
+	}
+
+done

@@ -1,0 +1,24 @@
+#!/bin/sh
+
+SCRIPT_PATH=$(dirname $0)
+
+[ -f /bin/git ] && {
+	[ -d ../$SCRIPT_PATH/.git ] && {
+		echo "Updating..."
+		$(cd ../$SCRIPT_PATH && git pull -f &> /dev/null) && {
+			tput cuu 1
+			printf "\033[92mDONE\033[00m: configs are updated\n"
+		} || {
+			tput cuu 1
+			printf "\033[91mERROR\033[00m: update failed\n"
+		}
+	} || {
+		cd ../$SCRIPT_PATH
+		git init -b master &> /dev/null
+		git remote add origin https://github.com/fenze/dots &> /dev/null
+		git pull &> /dev/null
+		$SCRIPT_PATH/update & exit
+	}
+} || {
+		printf "\033[91mERROR\033[00m: cannot update without git\n"
+}
