@@ -86,18 +86,6 @@ nm sc  :Commits   <cr>
 nm <space> /
 nm ; :
 
-nm lr :cal Rename()<cr>
-
-fun Rename()
-	let old_name = expand('<cword>')
-	let new_name = input('New name: ')
-  redraw
-	echo "\ "
-	if len(new_name) != 0
-		exe "%s/" . old_name . "/" . new_name
-	en
-endf
-
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
@@ -136,55 +124,6 @@ let g:fzf_colors = {
 	\ 'header':     ['fg', 'Normal'] }
 
 map <c-_> <plug>NERDCommenterToggle
-
-fun PlaceTab()
-	let line = getline('.')[0:col('.')-1]
-	" We need to remove the last element of the list like this,
-	" because for some reason you cannot select none of the elements
-	" using [:].
-	if len(line) == 0
-		return "\t"
-	else
-		let line = line[:-2]
-	endif
-	if match(line, '\c^[ \t]*$') != -1
-		return "\t"
-	else
-		let tabs_ = count(line, "\t")
-		let offset = len(line)
-		if tabs_ != -1
-			let offset = offset - tabs_ + (tabs_ * 4)
-		endif
-		let spaces = 4 - (offset) % 4
-		return repeat(" ", spaces)
-	endif
-endf
-
-inor <expr><tab> PlaceTab()
-
-set tabline=%!TabLine()
-
-fun TabLine()
-	let s = ''
-	for i in range(tabpagenr('$'))
-		" select the highlighting
-		if i + 1 == tabpagenr()
-			let s .= '%#TabLineSel#'
-		el
-			let s .= '%#TabLine#'
-		en
-		" the label is made by MyTabLabel()
-		let s .= ' %{Draw_label(' . (i + 1) . ')} '
-	endfo
-	let s .= '%#TabLineFill#%T'
-	retu s
-endf
-
-fun Draw_label(n)
-	let buflist = tabpagebuflist(a:n)
-	let winnr = tabpagewinnr(a:n)
-	retu bufname(buflist[winnr - 1])
-endf
 
 let g:instant_markdown_autostart = 0
 map tt :vnew term://zsh<cr>

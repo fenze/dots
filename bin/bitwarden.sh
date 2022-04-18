@@ -1,28 +1,28 @@
 # Copyright (c) 2022 fenze <contact@fenze.dev>
 # See license for more information.
 
-STATUS="Password:"
-
 login() {
 
-	PASSWORD=$(printf "" | dmenu -p $STATUS -P)
+	PASSWORD=$(printf "" | dmenu -P -p "Password:")
 
 	[ -z "$PASSWORD" ] && exit
 
-	LIST=$(echo $PASSWORD | bw list items 2> /dev/null) || login && {
-		LOGIN=$(echo $LIST | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
+	printf "$PASSWORD" | xargs bw unlock --raw --nointeraction > /tmp/bw_session
 
-		[ -z "$LOGIN" ] && exit
+	[ -z "${SESSION:="$(cat /tmp/bw_session)"}" ] && {
+		$0 & exit
+	} || {
+		SELECT=$(bw list --session $SESSION items 2 | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
+		SELECT_PASS=$(bw get --session $SESSION password $SELECT)
+		[ -z "$SELECT" ] && exit
 
 		case $(printf 'Login\nPassword' | dmenu -p "Copy:" ) in
-			"Login")
-				echo $LOGIN | xclip -sel clip
-				exit;;
-			"Password")
-				echo $PASSWORD | bw get password $LOGIN | xclip -sel clip
-				exit;;
+			"Login") echo $SELECT | xclip -sel clip;;
+			"Password") echo $SELECT_PASS | xclip -sel clip;;
 		esac
-  }
+
+		rm -f /tmp/bw_session
+	}
 }
 
 [ -z "$1" ] && login || {

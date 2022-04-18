@@ -57,7 +57,7 @@ alias v='nvim'
 
 # ls aliases
 alias ls='exa --color=always'
-alias la='ls -l --group-directories-first --git-ignore --git --no-time --no-user'
+alias la='ls -la --group-directories-first --git-ignore --git --no-time --no-user'
 alias lr='ls -R'
 
 # git aliases
@@ -75,7 +75,7 @@ alias gl='git log --oneline'
 alias bat='bat --theme=ansi'
 
 alias reload='source ~/.config/zsh/.zshrc'
-
+alias pacman='doas pacman'
 alias dev='cd ~/dev'
 alias tmp='cd ~/tmp'
 alias sys='cd ~/sys'
