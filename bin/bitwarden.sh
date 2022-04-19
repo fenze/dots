@@ -23,6 +23,8 @@ login() {
 
 	SELECT=$(echo $ITEMS | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
 
+	[ -z "$SELECT" ] && exit
+
 	case $(printf 'Login\nPassword' | dmenu -p "Copy:" ) in
 		"Login")
 			echo $SELECT | xclip -sel clip;;
