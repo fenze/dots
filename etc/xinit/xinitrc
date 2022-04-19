@@ -1,8 +1,6 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
+picom -b --experimental-backends &
 feh --no-fehbg --bg-fill ~/sys/dots/etc/wallpaper/wallpaper.jpg &
 barrierc -1 --disable-crypto --no-tray computer &
-dunst &
-picom &
 fusuma -d &
-while true; do status "with updates" && sleep 60; done &
 exec dwm

@@ -60,7 +60,7 @@ let g:LanguageClient_serverCommands = {
 	\ 'c': ['clangd'],
 	\ 'python': ['pylsp'],
 	\ 'javascript': ['typescript-language-server', '--stdio'] }
-au BufWritePost *.sass silent !sassc "%:p" "%:p:h/%:r.css"
+au BufWritePost *.sass silent !sassc "%:p" "%:r.css"
 
 setlocal omnifunc=LanguageClient#complete
 
@@ -133,8 +133,8 @@ au WinEnter * :stopinsert
 
 tno :q <C-\><C-n> :q <cr>
 
-nm <silent> :w :sil! write <cr>
-nm <silent> :q :sil! quit!<cr>
+" nm <silent> :w :sil! write <cr>
+" nm <silent> :q :sil! quit!<cr>
 nm <silent> <c-r> :sil! red<cr>
 nm <silent> u :sil! u<cr>
 

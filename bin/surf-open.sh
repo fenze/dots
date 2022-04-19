@@ -2,16 +2,16 @@
 
 search()
 {
-	BOOKMARKS='github.com youtube.com twitter.com devdocs.io'
+	BOOKMARKS='duckduckgo.com reddit.com github.com youtube.com twitter.com devdocs.io'
 
 	SEARCH=$(printf "$BOOKMARKS" | sed 's/ /\n/g' | dmenu -p SEARCH:)
 
+	[ -z "$SEARCH" ] && exit
+
 	[ -z "$(printf "$BOOKMARKS" | grep -w "$SEARCH")" ] && {
 		surf https://duckduckgo.com/?q="$SEARCH"
-
 	} || {
 		surf https://"$SEARCH"
-		exit
 	}
 }
 

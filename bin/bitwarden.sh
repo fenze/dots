@@ -3,26 +3,32 @@
 
 login() {
 
-	PASSWORD=$(printf "" | dmenu -P -p "Password:")
-
-	[ -z "$PASSWORD" ] && exit
-
-	printf "$PASSWORD" | xargs bw unlock --raw --nointeraction > /tmp/bw_session
-
-	[ -z "${SESSION:="$(cat /tmp/bw_session)"}" ] && {
-		$0 & exit
+	[ -f /tmp/bw_session ] && [ ! -z "$(cat /tmp/bw_session)" ] && {
+		SESSION=$(cat /tmp/bw_session)
 	} || {
-		SELECT=$(bw list --session $SESSION items 2 | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
-		SELECT_PASS=$(bw get --session $SESSION password $SELECT)
-		[ -z "$SELECT" ] && exit
+		PASSWORD=$(printf "" | dmenu -P -p "Password:")
+		[ -z "$PASSWORD" ] && exit
+		printf "$PASSWORD" | xargs bw unlock --raw --nointeraction > /tmp/bw_session
 
-		case $(printf 'Login\nPassword' | dmenu -p "Copy:" ) in
-			"Login") echo $SELECT | xclip -sel clip;;
-			"Password") echo $SELECT_PASS | xclip -sel clip;;
-		esac
-
-		rm -f /tmp/bw_session
+		[ -z "${SESSION:="$(cat /tmp/bw_session)"}" ] && {
+			$0 & exit
+		}
 	}
+
+	[ -f /tmp/bw_cache ] && [ ! -z "$(cat /tmp/bw_cache)" ] && {
+		ITEMS=$(cat /tmp/bw_cache)
+	} || {
+		ITEMS=$(bw list --session $SESSION --nointeraction items > /tmp/bw_cache)
+	}
+
+	SELECT=$(echo $ITEMS | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
+
+	case $(printf 'Login\nPassword' | dmenu -p "Copy:" ) in
+		"Login")
+			echo $SELECT | xclip -sel clip;;
+		"Password")
+			bw get --session $SESSION --nointeraction password $SELECT | xclip -sel clip;;
+	esac
 }
 
 [ -z "$1" ] && login || {

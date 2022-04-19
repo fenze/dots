@@ -33,7 +33,7 @@ UPDATES() {
 	updates=$(printf "$(yay -Qu && checkupdates)" 2> /dev/null | wc -l)
 
 	[ "0" = "$updates" ] || {
-		exec dwm -s "↑ $updates   $(VOL)  $(BAT)  $(WIFI)    $(date +%H:%M) "
+		exec dwm -s "↑ $updates  $(VOL)  $(BAT)  $(WIFI)  $(date +%H:%M) "
 	}
 }
 
@@ -63,9 +63,10 @@ VOL() {
 		}
 }
 
+INSTALL_PATH=/usr/bin/status
 case $1 in
-    "install") cp -u ./status.sh /usr/bin/status;;
-    "uninstall") rm -f /usr/bin/status;;
-		"with updates") exec dwm -s "$(VOL)  $(BAT)  $(WIFI)    $(date +%H:%M) " & UPDATES && exit;;
-		*) exec dwm -s "$(VOL)  $(BAT)  $(WIFI)    $(date +%H:%M) " && exit;;
+		'install') (set -x; cp $0 $INSTALL_PATH);;
+		'uninstall') (set -x; rm $INSTALL_PATH);;
+		"with updates") $INSTALL_PATH & UPDATES && exit;;
+		*) exec dwm -s "$(VOL)  $(BAT)  $(WIFI)  $(date +%H:%M) " && exit;;
 esac
