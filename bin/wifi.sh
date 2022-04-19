@@ -11,7 +11,7 @@
 }
 
 networks() {
-	printf "$(nmcli -g SSID,BARS device wifi list)\npower off\nrescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
+	printf "$(doas nmcli d w r && nmcli -g SSID,BARS d w l)\npower off\nrescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
 }
 
 is_known() {
@@ -24,9 +24,13 @@ connect_to() {
 
 	[ -z "$(is_known $1)" ] && {
 		PASSWORD=$(echo | dmenu -p "Password:" -P)
-		nmcli d w c $SSID password $PASSWORD
+		doas nmcli d w c $SSID password $PASSWORD
 	} || {
-		nmcli d w c $SSID
+		doas nmcli d w c $SSID || {
+			doas rm /etc/NetworkManager/system-connections/"$1".nmconnection
+			PASSWORD=$(echo | dmenu -p "Password:" -P)
+			doas nmcli d w c $SSID password $PASSWORD
+		}
 	}
 }
 
