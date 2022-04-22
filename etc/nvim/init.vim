@@ -18,11 +18,11 @@ set cursorline
 set hidden
 set noexpandtab
 set keywordprg=:tab\ Man
+set noshowmode
 set noshowcmd
 set splitbelow splitright
 set shortmess+=W
 set guicursor=n-v-c:block-Cursor
-set noshowmode
 
 syntax on
 filetype plugin indent on
@@ -35,14 +35,8 @@ cal plug#begin()
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	Plug 'preservim/nerdcommenter'
 	Plug 'cakebaker/scss-syntax.vim'
-	Plug 'ap/vim-css-color'
-	Plug 'aperezdc/vim-template'
 	Plug 'jiangmiao/auto-pairs'
 	Plug 'vshih/vim-make'
-	Plug 'jelera/vim-javascript-syntax'
-	Plug 'othree/javascript-libraries-syntax.vim'
-	Plug 'nvim-lua/plenary.nvim'
-	Plug 'sindrets/diffview.nvim'
 cal plug#end()
 
 cal deoplete#enable()
@@ -50,24 +44,29 @@ cal deoplete#custom#option('refresh_always', v:false)
 
 colo catppuccin
 
+so ~/.config/nvim/colors.vim
+
 hi! link EndofBuffer Normal
 hi! Normal ctermbg=NONE guibg=NONE
+hi! link NormalNC Normal
 hi Comment guifg=#8080aa
 
 au BufRead,BufNewFile *.scss set filetype=scss.css
 
 let g:LanguageClient_serverCommands = {
 	\ 'c': ['clangd'],
-	\ 'python': ['pylsp'],
-	\ 'javascript': ['typescript-language-server', '--stdio'] }
+	\ 'python': ['pylsp'] }
+
 au BufWritePost *.sass silent !sassc "%:p" "%:r.css"
 
-setlocal omnifunc=LanguageClient#complete
+set completefunc=LanguageClient#complete
 
 let g:email = "contact@fenze.dev"
 let g:LanguageClient_hoverPreview = "Never"
 
 let g:LanguageClient_echoProjectRoot = 0
+let g:LanguageClient_showCompletionDocs = 0
+
 nmap <silent> gd <Plug>(lcn-definition)
 nmap <silent> gr <Plug>(lcn-rename)
 nmap <silent> L <Plug>(lcn-hover)
@@ -132,10 +131,5 @@ au BufEnter * if &buftype == 'terminal' | :startinsert | endif
 au WinEnter * :stopinsert
 
 tno :q <C-\><C-n> :q <cr>
-
-" nm <silent> :w :sil! write <cr>
-" nm <silent> :q :sil! quit!<cr>
-nm <silent> <c-r> :sil! red<cr>
-nm <silent> u :sil! u<cr>
 
 au BufWrite * sil! :%s#\($\n\s*\)\+\%$## | :%s/\s\+$//e

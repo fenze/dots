@@ -1,13 +1,9 @@
 [user]
   name = fenze
   email = contact@fenze.dev
-  signingkey = A68F62254F5AEFCF
 
 [push]
   default = simple
-
-[commit]
-  gpgsign = true
 
 [init]
   defaultBranch = master

@@ -10,10 +10,12 @@
 	esac
 }
 
+# returns selected in dmenu network
 networks() {
-	printf "$(doas nmcli d w r && nmcli -g SSID,BARS d w l)\npower off\nrescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
+	printf "$(doas nmcli d w r && nmcli -g SSID,BARS d w l)\n power off\n rescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
 }
 
+# returns password of known network
 is_known() {
 	echo $(doas cat /etc/NetworkManager/system-connections/"$1".nmconnection | grep psk= | cut -d "=" -f2)
 }
@@ -24,12 +26,12 @@ connect_to() {
 
 	[ -z "$(is_known $1)" ] && {
 		PASSWORD=$(echo | dmenu -p "Password:" -P)
-		doas nmcli d w c $SSID password $PASSWORD
+		(doas nmcli d w c $SSID password $PASSWORD) || ($0;exit)
 	} || {
 		doas nmcli d w c $SSID || {
 			doas rm /etc/NetworkManager/system-connections/"$1".nmconnection
 			PASSWORD=$(echo | dmenu -p "Password:" -P)
-			doas nmcli d w c $SSID password $PASSWORD
+			(doas nmcli d w c $SSID password $PASSWORD) || ($0;exit)
 		}
 	}
 }
@@ -37,7 +39,7 @@ connect_to() {
 STATUS=$(nmcli r w)
 
 [ "$STATUS" = disabled ] && {
-	[ "$(echo "power on" | dmenu)" = power\ on ] && nmcli r w on
+	[ "$(echo "power on" | dmenu)" = power\ on ] && doas nmcli r w on
 }
 
 SELECT=$(networks)
@@ -47,6 +49,6 @@ SELECT=$(networks)
 [ "$SELECT" = "power off" ] && nmcli r w off && exit
 
 case $SELECT in
-	*rescan*) nmcli d w r && $($0) & exit;;
-	*) connect_to "$SELECT";;
+	*rescan*) doas nmcli d w r && ($0;exit);;
+	*) connect_to "$SELECT" && status;;
 esac

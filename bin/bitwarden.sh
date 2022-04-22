@@ -15,11 +15,11 @@ login() {
 		}
 	}
 
-	[ -f /tmp/bw_cache ] && [ ! -z "$(cat /tmp/bw_cache)" ] && {
-		ITEMS=$(cat /tmp/bw_cache)
-	} || {
-		ITEMS=$(bw list --session $SESSION --nointeraction items > /tmp/bw_cache)
+	[ -f /tmp/bw_cache ] && [ ! -z "$(cat /tmp/bw_cache)" ] || {
+		bw list --session $SESSION --nointeraction items > /tmp/bw_cache
 	}
+
+	ITEMS=$(cat /tmp/bw_cache)
 
 	SELECT=$(echo $ITEMS | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" | dmenu)
 
