@@ -3,5 +3,6 @@ picom -b --experimental-backends &
 feh --no-fehbg --bg-fill ~/sys/dots/etc/wallpaper/wallpaper.jpg &
 barrierc -1 --disable-crypto --no-tray computer &
 fusuma -d &
+dunst &
 while true; do status && sleep 120; done &
 exec dwm

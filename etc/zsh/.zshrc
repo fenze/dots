@@ -137,8 +137,8 @@ fzf_open()
 {
   tput cuu 2
 
-	[ "$1" = '-type d'  ] && TARGET=$(find -L . -type d | cut -b3- | grep -vi "$FIND_EXCEPTIONS\|.config" | fzf --height 40%)
-	[ "$1" = '-type f'  ] && TARGET=$(find -L . -type f | cut -b3- | grep -vi $FIND_EXCEPTIONS  | fzf --height 40%)
+	[ "$1" = '-type d'  ] && TARGET=$(find . -type d | cut -b3- | grep -vi "$FIND_EXCEPTIONS\|.config" | fzf --height 40%)
+	[ "$1" = '-type f'  ] && TARGET=$(find . -type f | cut -b3- | grep -vi $FIND_EXCEPTIONS  | fzf --height 40%)
 
   [ -z $TARGET ] && return
 

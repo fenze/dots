@@ -29,14 +29,6 @@ BAT() {
 	esac
 }
 
-UPDATES() {
-	updates=$(printf "$(yay -Qu && checkupdates)" 2> /dev/null | wc -l)
-
-	[ "0" = "$updates" ] || {
-		exec dwm -s "↑ $updates  $(VOL)  $(BAT)  $(WIFI)  $(date +%H:%M) "
-	}
-}
-
 VOL() {
 		bluetooth=$(pactl list sinks short | grep bluez)
 
@@ -56,7 +48,6 @@ VOL() {
 						4* | 5* | 6*) echo  && exit;;
 						7* | 8* | 9* | 1*) echo  && exit;;
 					esac
-
 			}
 		} || {
 			echo 
@@ -67,6 +58,5 @@ INSTALL_PATH=/usr/bin/status
 case $1 in
 		'install') (set -x; cp $0 $INSTALL_PATH);;
 		'uninstall') (set -x; rm $INSTALL_PATH);;
-		"with updates") $INSTALL_PATH & UPDATES && exit;;
 		*) exec dwm -s "$(VOL)  $(BAT)  $(WIFI)  $(date +%H:%M) " && exit;;
 esac

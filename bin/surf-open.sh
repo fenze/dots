@@ -4,14 +4,18 @@ search()
 {
 	BOOKMARKS='duckduckgo.com reddit.com github.com youtube.com twitter.com devdocs.io'
 
-	SEARCH=$(printf "$BOOKMARKS" | sed 's/ /\n/g' | dmenu -p SEARCH:)
+	SEARCH=$(printf "$BOOKMARKS" | sed 's/ /\n/g' | cut -f1 -d"." | dmenu -p SEARCH:)
 
 	[ -z "$SEARCH" ] && exit
 
 	[ -z "$(printf "$BOOKMARKS" | grep -w "$SEARCH")" ] && {
 		surf https://duckduckgo.com/?q="$SEARCH"
 	} || {
-		surf https://"$SEARCH"
+		[ $SEARCH = devdocs ] && {
+			surf https://"$SEARCH".io
+		} || {
+			surf https://"$SEARCH".com
+		}
 	}
 }
 

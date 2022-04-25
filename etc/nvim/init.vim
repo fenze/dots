@@ -22,6 +22,7 @@ set noshowmode
 set noshowcmd
 set splitbelow splitright
 set shortmess+=W
+set shortmess+=c
 set guicursor=n-v-c:block-Cursor
 
 syntax on
@@ -31,12 +32,9 @@ cal plug#begin()
 	Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 	Plug 'junegunn/fzf.vim'
 	Plug 'catppuccin/nvim', {'as': 'catppuccin'}
-	Plug 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	Plug 'preservim/nerdcommenter'
-	Plug 'cakebaker/scss-syntax.vim'
-	Plug 'jiangmiao/auto-pairs'
-	Plug 'vshih/vim-make'
+	Plug 'deoplete-plugins/deoplete-clang'
 cal plug#end()
 
 cal deoplete#enable()
@@ -53,19 +51,7 @@ hi Comment guifg=#8080aa
 
 au BufRead,BufNewFile *.scss set filetype=scss.css
 
-let g:LanguageClient_serverCommands = {
-	\ 'c': ['clangd'],
-	\ 'python': ['pylsp'] }
-
 au BufWritePost *.sass silent !sassc "%:p" "%:r.css"
-
-set completefunc=LanguageClient#complete
-
-let g:email = "contact@fenze.dev"
-let g:LanguageClient_hoverPreview = "Never"
-
-let g:LanguageClient_echoProjectRoot = 0
-let g:LanguageClient_showCompletionDocs = 0
 
 nmap <silent> gd <Plug>(lcn-definition)
 nmap <silent> gr <Plug>(lcn-rename)
@@ -74,6 +60,9 @@ nmap <silent> L <Plug>(lcn-hover)
 let g:deoplete#enable_ignore_case = 1
 let g:deoplete#max_abbr_width = 0
 let g:deoplete#max_menu_width = 0
+
+set completeopt-=preview
+
 let g:NERDSpaceDelims = 1
 let g:NERDCommentEmptyLines = 1
 
