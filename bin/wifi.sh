@@ -1,3 +1,5 @@
+#!/bin/sh
+
 [ -z "$1" ] || {
 	INSTALL_PATH=/usr/bin/dmenu_wifi
 	case "$1" in
@@ -12,7 +14,7 @@
 
 # returns selected in dmenu network
 networks() {
-	printf "$(doas nmcli d w r && nmcli -g SSID,BARS d w l)\n power off\n rescan" | grep "\w" | awk -F: '{ print $1" "$2 }' | dmenu
+	printf "$(doas nmcli d w r && nmcli -g SSID,BARS d w l | sed 's/[[:blank:]]*$//' | sed 's/:/ /g' | grep -e '\w:*')\npower off\nrescan" | dmenu
 }
 
 # returns password of known network
@@ -39,16 +41,16 @@ connect_to() {
 STATUS=$(nmcli r w)
 
 [ "$STATUS" = disabled ] && {
-	[ "$(echo "power on" | dmenu)" = power\ on ] && doas nmcli r w on
+	[ "$(echo "power on" | dmenu)" = power\ on ] && {
+		doas nmcli r w on && ($0;exit)
+	}
 }
 
 SELECT=$(networks)
 
-[ -z "$SELECT" ] && exit
-
-[ "$SELECT" = "power off" ] && nmcli r w off && exit
-
 case $SELECT in
 	*rescan*) doas nmcli d w r && ($0;exit);;
+	*power\ off*) doas nmcli r w off && exit;;
+	'') exit;;
 	*) connect_to "$SELECT" && status;;
 esac
