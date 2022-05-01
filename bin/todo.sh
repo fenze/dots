@@ -27,7 +27,8 @@ todo()
 				"Remove")
 					printf "$tasks" | grep -v "$select" > $path;;
 				"Rename")
-					new_name=$(echo | dmenu $@ -p "New name:")
+					new_name=$(printf "" | dmenu $@ -p "New name:")
+					[ -z "$new_name" ] && exit
 					printf "$tasks" | sed "s/$select/$new_name/" > $path;;
 			esac
 	esac
@@ -35,7 +36,7 @@ todo()
 
 
 [ -z "$1" ] && todo || {
-	INSTALL_PATH=/usr/bin/dmenu_bw
+	INSTALL_PATH=/usr/bin/dmenu_todo
 	case "$1" in
 		'install') (set -x; cp $0 $INSTALL_PATH);;
 		'uninstall') (set -x; rm $INSTALL_PATH);;
