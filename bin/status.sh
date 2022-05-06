@@ -5,7 +5,7 @@
 
 WIFI() {
 	NET=$(nmcli -g IN-USE,SSID device wifi list | grep "\*" | cut -f2 -d":")
-	[ -z "$NET" ] || echo  ""
+	[ -z "$NET" ] || echo  ""
 }
 
 BAT() {

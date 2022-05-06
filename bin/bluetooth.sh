@@ -14,10 +14,11 @@ set -x
 
 $(bluetoothctl show | grep -q "Powered: yes") && {
 	DEVICES=$(bluetoothctl devices 2> /dev/null | cut -d ' ' -f 3-)
-	CONNECT_TO=$(printf "$DEVICES\npower off\nrescan" | dmenu -p "Connect to:")
+	CONNECT_TO=$(printf "$DEVICES\npower off\nrescan\nrestart" | dmenu -p "Connect to:")
 	case $CONNECT_TO in
 		power\ off) bluetoothctl power off &> /dev/null && exit;;
-		rescan) bluetoothctl scan on & sleep 2 && killall bluetoothctl && $0 && exit;;
+		rescan) bluetoothctl scan on & sleep 2 && killall bluetoothctl && $0; exit;;
+		restart) doas systemctl restart bluetooth && $0; exit;;
 		*)
 			MAC=$(bluetoothctl devices 2> /dev/null | grep "$CONNECT_TO" | cut -d' ' -f2)
 			printf "connect $MAC\n" | bluetoothctl;;

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Copyright (c) 2022 fenze <contact@fenze.dev>
 # See license for more information.
 
