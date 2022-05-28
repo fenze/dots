@@ -1,56 +1,70 @@
 #!/bin/sh
 
-[ -z "$1" ] || {
-	INSTALL_PATH=/usr/bin/dmenu_wifi
-	case "$1" in
-		'install')
-			(set -x; cp $0 $INSTALL_PATH)
-			exit;;
-		'uninstall')
-			(set -x; rm $INSTALL_PATH)
-			exit;;
-	esac
-}
+POSTCMDS="status"
 
-# returns selected in dmenu network
-networks() {
-	printf "$(doas nmcli d w r && nmcli -g SSID,BARS d w l | sed 's/[[:blank:]]*$//' | sed 's/:/ /g' | grep -e '\w:*')\npower off\nrescan" | dmenu
-}
-
-# returns password of known network
-is_known() {
-	echo $(doas cat /etc/NetworkManager/system-connections/"$1".nmconnection | grep psk= | cut -d "=" -f2)
-}
-
-connect_to() {
-	LENGHT=$(expr $(echo "$1" | wc -w) - 1)
-	SSID=$(echo "$1" | cut -f-$LENGHT -d" ")
-
-	[ -z "$(is_known $1)" ] && {
-		PASSWORD=$(echo | dmenu -p "Password:" -P)
-		(doas nmcli d w c $SSID password $PASSWORD) || ($0;exit)
-	} || {
-		doas nmcli d w c $SSID || {
-			doas rm /etc/NetworkManager/system-connections/"$1".nmconnection
-			PASSWORD=$(echo | dmenu -p "Password:" -P)
-			(doas nmcli d w c $SSID password $PASSWORD) || ($0;exit)
-		}
-	}
+menu()
+{
+	printf "$1" | dmenu -p "$2"
 }
 
 STATUS=$(nmcli r w)
 
-[ "$STATUS" = disabled ] && {
-	[ "$(echo "power on" | dmenu)" = power\ on ] && {
+[ $STATUS = disabled ] && {
+	[ -z "$(echo "power on" | dmenu)" ] || {
 		doas nmcli r w on && ($0;exit)
 	}
 }
 
-SELECT=$(networks)
+NETWORKS="$(LC_ALL=C nmcli -t -w 0 -g IN-USE,SSID,BARS d w l 2> /dev/null)"
+UNIQ=$(printf "$NETWORKS" | grep -P ".:\w" | sort -u -k2)
+SELECT=$(menu "Settings\n$(echo "$UNIQ" | cut -f2- -d":" | tr ":" " ")" "Wi-Fi:")
+
+is_known()
+{
+	echo "$(doas cat /etc/NetworkManager/system-connections/"$1".nmconnection 2> /dev/null \
+	       | grep psk= | cut -d "=" -f2)"
+}
+
+with_passwd()
+{
+	nmcli d w c "$1" password "$(printf "" | dmenu -p "Password:" -P)" \
+		|| with_passwd "$1"
+}
+
+connect()
+{
+	LENGHT=$(($(echo "$1" | wc -w) - 1))
+	SSID=$(echo "$1" | cut -f-$LENGHT -d" ")
+
+	case $(menu "Connect\nForget" "$SSID") in
+		'') exit;;
+		Forget)
+			nmcli c d "$SSID" > /dev/null
+			exit;;
+	esac
+
+
+	[ -z "$(is_known "$SSID")" ] && {
+		with_passwd "$SSID"
+	} || {
+		nmcli d w c "$SSID" > /dev/null || with_passwd "$SSID"
+	}
+}
+
+settings()
+{
+	case $(printf "Poweroff\nRescan" | dmenu) in
+		Poweroff) nmcli r w off > /dev/null;;
+		Rescan) nmcli d w r > /dev/null && sleep 2 && ($0;exit);;
+		'') ($0;exit);;
+	esac
+
+}
 
 case $SELECT in
-	*rescan*) doas nmcli d w r && ($0;exit);;
-	*power\ off*) doas nmcli r w off && exit;;
 	'') exit;;
-	*) connect_to "$SELECT" && status;;
+	Settings) settings;;
+	*) connect "$SELECT";;
 esac
+
+eval "$POSTCMDS"
