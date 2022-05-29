@@ -1,6 +1,6 @@
 #!/bin/sh
 
-POSTCMDS="status"
+# POSTCMDS="status"
 
 menu()
 {
@@ -15,7 +15,7 @@ STATUS=$(nmcli r w)
 	}
 }
 
-NETWORKS="$(LC_ALL=C nmcli -t -w 0 -g IN-USE,SSID,BARS d w l 2> /dev/null)"
+NETWORKS="$(nmcli -g IN-USE,SSID,BARS d w 2> /dev/null)"
 UNIQ=$(printf "$NETWORKS" | grep -P ".:\w" | sort -u -k2)
 SELECT=$(menu "Settings\n$(echo "$UNIQ" | cut -f2- -d":" | tr ":" " ")" "Wi-Fi:")
 
@@ -27,7 +27,11 @@ is_known()
 
 with_passwd()
 {
-	nmcli d w c "$1" password "$(printf "" | dmenu -p "Password:" -P)" \
+	local -a PASSWD
+	PASSWD=$(printf "" | dmenu -p "Password:" -P)
+
+	[ -z "$PASSWD" ] && exit
+	nmcli d w c "$1" password "$PASSWD" \
 		|| with_passwd "$1"
 }
 
@@ -44,10 +48,11 @@ connect()
 	esac
 
 
-	[ -z "$(is_known "$SSID")" ] && {
+	[ -z "${PASSWD:=$(is_known "$SSID")}" ] && {
 		with_passwd "$SSID"
 	} || {
-		nmcli d w c "$SSID" > /dev/null || with_passwd "$SSID"
+		echo "wqfw"
+		nmcli d w c "$SSID" password "$PASSWD"
 	}
 }
 
@@ -58,7 +63,6 @@ settings()
 		Rescan) nmcli d w r > /dev/null && sleep 2 && ($0;exit);;
 		'') ($0;exit);;
 	esac
-
 }
 
 case $SELECT in
